@@ -53,13 +53,7 @@ jobs:
       - name: Deploy Frontend to Object Storage
         uses: oracle-actions/run-oci-cli-command@v1.3.2
         with:
-          command: |
-            oci --debug os object put \
-              --namespace ${{ secrets.TENANCY_NAMESPACE }} \
-              --bucket-name doc-converter-frontend \
-              --file frontend/index.html \
-              --name index.html \
-              --force 
+          command: oci os object put --namespace ${{ secrets.TENANCY_NAMESPACE }} --bucket-name doc-converter-frontend --file frontend/index.html --name index.html --force
           silent: false
         
       - name: Confirm Deployment
