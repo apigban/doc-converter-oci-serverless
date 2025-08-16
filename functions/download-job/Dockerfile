@@ -10,8 +10,7 @@ RUN go mod download
 COPY . .
 
 # Build the function binary
-# This assumes the Docker build context is the repository root
-RUN cd functions/${FUNCTION_NAME} && CGO_ENABLED=0 go build -o /app/func .
+RUN CGO_ENABLED=0 go build -o /app/func ./functions/${FUNCTION_NAME}/main.go
 
 # ---- Final Stage ----
 FROM alpine:latest
