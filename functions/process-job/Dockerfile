@@ -11,7 +11,7 @@ COPY . .
 
 # Build the function binary
 # This assumes the Docker build context is the repository root
-RUN CGO_ENABLED=0 go build -o /app/func ./functions/${FUNCTION_NAME}/
+RUN CGO_ENABLED=0 go build -o /app/func doc-converter-oci-serverless/functions/${FUNCTION_NAME}
 
 # ---- Final Stage ----
 FROM alpine:latest

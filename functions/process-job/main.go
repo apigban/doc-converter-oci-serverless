@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"doc-converter/pkg/converter"
-	"doc-converter/pkg/queue"
+	"doc-converter-oci-serverless/pkg/converter"
+	"doc-converter-oci-serverless/pkg/queue"
 	"encoding/json"
 	"io"
 	"log"
