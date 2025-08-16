@@ -2,6 +2,9 @@
 FROM golang:1.24-alpine AS builder
 WORKDIR /app
 
+# Declare the build argument so it can be used in RUN commands
+ARG FUNCTION_NAME
+
 # Copy modules and download dependencies first for build caching
 COPY go.mod go.sum ./
 RUN go mod download
