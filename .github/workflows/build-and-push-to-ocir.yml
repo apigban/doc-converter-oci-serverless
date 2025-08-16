@@ -1,0 +1,37 @@
+name: Build and Push Functions to OCIR
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        function: [create-job, download-job, get-job-status, process-job]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to OCI Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGION }}.ocir.io
+          username: ${{ secrets.TENANCY_NAMESPACE }}/${{ secrets.OCIR_USER }}
+          password: ${{ secrets.OCIR_AUTH_TOKEN }}
+
+      - name: Build and Push Docker Image
+        run: |
+          # The image name is now built entirely from secrets and runtime context
+          IMAGE_NAME="${{ secrets.REGION }}.ocir.io/${{ secrets.TENANCY_NAMESPACE }}/${{ secrets.REPO_NAME }}:${{ matrix.function }}-${{ github.sha }}"
+          
+          docker build \
+            --build-arg FUNCTION_NAME=${{ matrix.function }} \
+            -t ${IMAGE_NAME} \
+            -f ./functions/${{ matrix.function }}/Dockerfile .
+            
+          docker push ${IMAGE_NAME}
+          
+          echo "Successfully pushed ${{ matrix.function }} to ${IMAGE_NAME}"
