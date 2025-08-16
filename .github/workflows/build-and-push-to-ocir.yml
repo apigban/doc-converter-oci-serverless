@@ -59,7 +59,8 @@ jobs:
               --bucket-name doc-converter-frontend \
               --file frontend/index.html \
               --name index.html \
-              --force
+              --force 
+          silent: false
         
       - name: Confirm Deployment
         run: echo "Frontend successfully deployed to OCI Object Storage."
