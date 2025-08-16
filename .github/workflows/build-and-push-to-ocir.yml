@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        function: [create-job, download-job, get-job-status, process-job]
+        function: [create-job, download-job, get-job-status, process-job, frontend]
     
     steps:
       - name: Checkout repository
@@ -27,10 +27,15 @@ jobs:
           # The image name is now built entirely from secrets and runtime context
           IMAGE_NAME="${{ secrets.REGION }}.ocir.io/${{ secrets.TENANCY_NAMESPACE }}/${{ secrets.REPO_NAME }}:${{ matrix.function }}-${{ github.sha }}"
           
+          DOCKERFILE_PATH="./functions/${{ matrix.function }}/Dockerfile"
+          if [ "${{ matrix.function }}" = "frontend" ]; then
+            DOCKERFILE_PATH="./frontend/Dockerfile"
+          fi
+
           docker build \
             --build-arg FUNCTION_NAME=${{ matrix.function }} \
             -t ${IMAGE_NAME} \
-            -f ./functions/${{ matrix.function }}/Dockerfile .
+            -f ${DOCKERFILE_PATH} .
             
           docker push ${IMAGE_NAME}
           
