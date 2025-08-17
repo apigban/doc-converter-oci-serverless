@@ -105,6 +105,9 @@
             const urlInput = document.getElementById('urls');
             const selectorInput = document.getElementById('selector');
 
+            // Define the API Gateway endpoint
+            const apiEndpoint = 'https://kdws4l7t5adghpxmd2baf4es5i.apigateway.me-dubai-1.oci.customer-oci.com/api/v1';
+
             conversionForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
@@ -124,7 +127,8 @@
                 const selector = document.getElementById('selector').value;
 
                 try {
-                    const response = await fetch('/api/jobs', {
+                    // Use the full API endpoint URL
+                    const response = await fetch(`${apiEndpoint}/jobs`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ urls, selector }),
@@ -146,7 +150,8 @@
             function pollJobStatus(jobId) {
                 const interval = setInterval(async () => {
                     try {
-                        const response = await fetch(`/api/jobs/${jobId}/status`);
+                        // Use the full API endpoint URL
+                        const response = await fetch(`${apiEndpoint}/jobs/${jobId}/status`);
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
@@ -171,7 +176,8 @@
             function showResults(jobId) {
                 resultsContainer.classList.remove('hidden');
                 resultsSummary.textContent = 'Job completed. Your download is ready.';
-                downloadBtn.href = `/api/jobs/${jobId}/download`;
+                // Use the full API endpoint URL
+                downloadBtn.href = `${apiEndpoint}/jobs/${jobId}/download`;
             }
 
             function resetForm() {
